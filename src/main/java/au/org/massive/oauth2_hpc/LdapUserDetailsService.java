@@ -71,7 +71,7 @@ public class LdapUserDetailsService implements UserDetailsService {
 	 * Converts an LDAP search result into a {@link UserDetails} object
 	 * @param massiveLdapSearchResult
 	 * @return a UserDetails object
-	 * @throws NamingException
+	 * @throws NamingException if the <pre>uid</pre> attribute does not exist
 	 */
 	private UserDetails createUserObject(SearchResult massiveLdapSearchResult, String email) throws NamingException {
 		String userId = (String) massiveLdapSearchResult.getAttributes().get("uid").get();
@@ -83,7 +83,7 @@ public class LdapUserDetailsService implements UserDetailsService {
 
 	/**
 	 * Prevent LDAP injection
-	 * @param filter
+	 * @param filter LDAP filter string to escape
 	 * @return escaped string
 	 */
 	private String escapeLDAPSearchFilter(String filter) {

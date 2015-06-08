@@ -50,7 +50,7 @@ public class SSHCertificateGenerator {
 	}
 	
 	/**
-	 * Interface for {@link SSHExtensions} and {@link SSHCriticaloptions}
+	 * Interface for {@link SSHExtensions} and {@link SSHCriticalOptions}
 	 * @author jrigby
 	 *
 	 */
@@ -112,13 +112,12 @@ public class SSHCertificateGenerator {
 	/**
 	 * Signs a public key to produce a certificate
 	 * 
-	 * @param options
-	 * @param caPubKey
-	 * @param caPrivKey
+	 * @param options certificate signing options
+	 * @param caPubKey the public key of the CA
+	 * @param caPrivKey the private key of the CA
 	 * @return a certificate
-	 * @throws IOException
-	 * @throws InvalidKeyException
-	 * @throws SignatureException
+	 * @throws InvalidKeyException thrown if the keys are invalid
+	 * @throws SignatureException thrown if a signature could not be generated
 	 */
 	public static String generateSSHCertificate(SSHCertificateOptions options, RSAPublicKey caPubKey, RSAPrivateKey caPrivKey) throws IOException, InvalidKeyException, SignatureException {
 		final String header = "ssh-rsa-cert-v01@openssh.com ";
@@ -136,13 +135,12 @@ public class SSHCertificateGenerator {
 	
 	/**
 	 * Produces a certificate byte array. The result is formatted by {@link SSHCertificateGenerator#generateSSHCertificate(SSHCertificateOptions, RSAPublicKey, RSAPrivateKey)}
-	 * @param options
-	 * @param caPubKey
-	 * @param caPrivKey
+	 * @param options certificate signing options
+	 * @param caPubKey the public key of the CA
+	 * @param caPrivKey the private key of the CA
 	 * @return certificate as a byte array
-	 * @throws IOException
-	 * @throws InvalidKeyException
-	 * @throws SignatureException
+	 * @throws InvalidKeyException thrown if the keys are invalid
+	 * @throws SignatureException thrown if a signature could not be generated
 	 */
 	private static byte[] signCert(SSHCertificateOptions options, RSAPublicKey caPubKey, RSAPrivateKey caPrivKey) throws IOException, InvalidKeyException, SignatureException {
 		Random rnd;

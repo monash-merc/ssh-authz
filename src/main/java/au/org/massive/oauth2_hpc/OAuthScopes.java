@@ -13,7 +13,7 @@ public enum OAuthScopes {
 	
 	/**
 	 * Convenience method to create the Spring security expression
-	 * @return
+	 * @return Spring Security expression
 	 */
 	public String toSpringExpression() {
 		return "#oauth2.hasScope('"+this.name()+"')";

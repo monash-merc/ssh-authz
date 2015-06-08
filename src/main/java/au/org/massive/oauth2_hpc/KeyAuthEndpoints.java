@@ -45,12 +45,8 @@ public class KeyAuthEndpoints {
 	 * Accepts a public key and optional valid period and returns a signed certificate.
 	 * Json request example for a 10 day certificate: { "public_key": "...", "valid_for": "10" }
 	 * The public key is RSA, formatted as with ssh-keygen in base64 (i.e. ~/.ssh/id_rsa.pub)
-	 * 
-	 * @param request
-	 * @param response
+	 *
 	 * @return the certificate
-	 * @throws Exception 
-	 * @throws IOException
 	 */
 	@RequestMapping(value="/api/v1/sign_key",
 			method={RequestMethod.GET,RequestMethod.POST},

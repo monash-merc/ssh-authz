@@ -35,15 +35,6 @@ public class SSHCertificateOptions {
 	
 	/**
 	 * Private constructor; object instantiated by the {@link SSHCertificateOptions.Builder}
-	 * @param pubKey
-	 * @param serial
-	 * @param keyId
-	 * @param type
-	 * @param principals
-	 * @param validBefore
-	 * @param validAfter
-	 * @param criticalOpts
-	 * @param extensions
 	 */
 	private SSHCertificateOptions(RSAPublicKey pubKey, long serial,
 			String keyId, SSHCertType type, String[] principals,
@@ -173,8 +164,7 @@ public class SSHCertificateOptions {
 		/**
 		 * Sets the validBefore and validAfter timestamps to be
 		 * from now to nDays in the future.
-		 * @param nDays
-		 * @return
+		 * @param nDays number of days for which the certificate should be valid
 		 */
 		public Builder setValidDaysFromNow(int nDays) {
 			final long oneDay = 86400;
@@ -206,7 +196,6 @@ public class SSHCertificateOptions {
 		
 		/**
 		 * Sets the standard {@link SSHExtensions}
-		 * @return
 		 */
 		public Builder setDefaultOptions() {
 			criticalOpts = new HashMap<SSHCriticalOptions,String>();
@@ -223,7 +212,7 @@ public class SSHCertificateOptions {
 	
 	/**
 	 * Convenience method to return a new builder object
-	 * @return
+	 * @return a {@link Builder} object
 	 */
 	public static Builder builder() {
 		return new Builder();

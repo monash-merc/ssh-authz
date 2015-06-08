@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 /**
- * Utility class to process simple key/value json data in the request body. Does not support depth > 1
+ * Utility class to process simple key/value json data in the request body. Does not support depth greater than 1
  * @author jrigby
  *
  */
@@ -26,9 +26,8 @@ public class JsonRequest {
 	
 	/**
 	 * Extracts the request body from {@link HttpServletRequest}
-	 * @param request
+	 * @param request the requst from which to extract the json request
 	 * @return string representation of the request body
-	 * @throws IOException
 	 */
 	private static String getRequestBody(HttpServletRequest request) throws IOException {
 		StringBuilder sb = new StringBuilder();
@@ -41,10 +40,10 @@ public class JsonRequest {
 	}
 	
 	/**
-	 * Converts a simple key/value json request to a {@link Map<String,String>}
-	 * @param request
+	 * Converts a simple key/value json request to a <pre>Map&lt;String,String&gt;</pre> object
+	 * @param request the requst from which to extract the json request
 	 * @return a Map of the key/value data
-	 * @throws JsonSyntaxException
+	 * @throws JsonSyntaxException if the request contains invalid json
 	 */
 	@SuppressWarnings("unchecked")
 	public static Map<String,String> processJsonRequest(HttpServletRequest request) throws JsonSyntaxException {

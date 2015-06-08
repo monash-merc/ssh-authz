@@ -36,9 +36,8 @@ public class KeyCodec {
 	
 	/**
 	 * Reads a file into memory as a byte array
-	 * @param file
+	 * @param file file to load
 	 * @return file content as a byte array
-	 * @throws IOException
 	 */
 	protected static byte[] readFile(File file) throws IOException {
 		FileInputStream fileInputStream = new FileInputStream(file);
@@ -51,9 +50,8 @@ public class KeyCodec {
 	/**
 	 * Reads a password from the console. Used when the private key needs to be decrypted but
 	 * a passphrase is either not provided or incorrect.
-	 * @param prompt
-	 * @return
-	 * @throws IOException
+	 * @param prompt text to display as a password prompt
+	 * @return the password
 	 */
 	private static String readPassword(String prompt) throws IOException {
 		Console console = System.console();
@@ -66,7 +64,7 @@ public class KeyCodec {
 	/**
 	 * Decodes a key pair from a byte array
 	 * @param data byte array
-	 * @param passphrase
+	 * @param passphrase private key passphrase - can be null if not required
 	 * @return the key pair
 	 */
 	public static KeyPair decodePEMKeyPair(byte[] data, String passphrase) {
@@ -110,10 +108,9 @@ public class KeyCodec {
 	
 	/**
 	 * Decodes a key pair from file
-	 * @param file
-	 * @param passphrase
+	 * @param file key pair file
+	 * @param passphrase private key passphrase - can be null if not required
 	 * @return the key pair
-	 * @throws IOException
 	 */
 	public static KeyPair decodePEMKeyPair(File file, String passphrase) throws IOException {
 		log.info("Loading key pair file: "+file.getAbsolutePath());
@@ -122,7 +119,7 @@ public class KeyCodec {
 	
 	/**
 	 * Encodes a key pair (doesn't encrypt the private key)
-	 * @param keyPair
+	 * @param keyPair key pair to encode
 	 * @return base64 encoded key pair
 	 */
 	public static String encodePEMKeyPair(KeyPair keyPair) {
@@ -131,8 +128,8 @@ public class KeyCodec {
 	
 	/**
 	 * Encodes an object in PEM format using bouncycastle's {@link JcaPEMWriter}
-	 * @param keyObj
-	 * @return
+	 * @param keyObj key object
+	 * @return string encoding of the key object
 	 */
 	protected static String encode(Object keyObj) {
 		try {
