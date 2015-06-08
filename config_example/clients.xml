@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<registered-clients>
+  <client>
+    <name>Client Name</name>
+    <client-id>Client Identifier</client-id>
+    <client-secret>keep me secret</client-secret>
+    <allowed-grant-types>
+      <grant>authorization_code</grant>
+      <grant>implicit</grant>
+    </allowed-grant-types>
+    <allowed-redirects>
+      <url>https://example.com/api/oauth/callback</url>
+    </allowed-redirects>
+  </client>
+</registered-clients>
