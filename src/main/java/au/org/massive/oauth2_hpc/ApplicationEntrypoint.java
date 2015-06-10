@@ -6,6 +6,9 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 /**
  * Main application entrypoint
  * @author jrigby
@@ -29,8 +32,9 @@ public class ApplicationEntrypoint {
 	 * @return
 	 */
 	@Bean
-	public EmbeddedServletContainerFactory tomcat() {
+	public EmbeddedServletContainerFactory tomcat() throws UnknownHostException {
 	    TomcatEmbeddedServletContainerFactory myFactory = new TomcatEmbeddedServletContainerFactory();
+		myFactory.setAddress(InetAddress.getByName(settings.getTomcatBindAddress()));
 	    myFactory.setProtocol(settings.getTomcatProtocol());
 	    myFactory.setPort(settings.getTomcatPort());
 	    return myFactory;

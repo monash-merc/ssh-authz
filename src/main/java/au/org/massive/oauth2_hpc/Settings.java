@@ -70,13 +70,13 @@ public class Settings {
 		return sb.toString();
 	}
 	
-	public String getTomcatProtocol() {
-		return config.getString("tomcat-protocol", "AJP/1.3");
-	}
+	public String getTomcatProtocol() { return config.getString("tomcat-protocol", "AJP/1.3"); }
 	
 	public int getTomcatPort() {
 		return config.getInt("tomcat-port", 9000);
 	}
+
+	public String getTomcatBindAddress() { return config.getString("tomcat-bind-address", "localhost"); }
 	
 	public String getLdapProviderUrl() {
 		return config.getString("ldap-provider-url");
