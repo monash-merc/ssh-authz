@@ -50,9 +50,9 @@ public class OAuthServer extends AuthorizationServerConfigurerAdapter {
 		endpoints
 		.tokenServices(defaultTokenServices())
 		.authenticationManager(authenticationManager);
-		
+
 	}
-	
+
 	@Bean
 	public JwtAccessTokenConverter jwtAccessTokenConverter() {
 		JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
@@ -99,7 +99,7 @@ public class OAuthServer extends AuthorizationServerConfigurerAdapter {
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security)
 			throws Exception {
-		super.configure(security);
+		security.checkTokenAccess("permitAll()");
 	}
 
 	@Override
