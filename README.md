@@ -22,12 +22,8 @@ SSH-AuthZ expect to have its `/oauth/authorize` endpoint protected by mod\_shib 
         require valid-user
 	    ProxyPass ajp://localhost:9000/oauth/authorize
     </Location>
-    <Location /oauth/confirm_access>
-	    AuthType Shibboleth
-        ShibRequireSession On
-        ShibUseHeaders On
-        require valid-user
-	    ProxyPass ajp://localhost:9000/oauth/confirm_access
+    <Location /oauth/static>
+	    ProxyPass ajp://localhost:9000/oauth/static
     </Location>
 	<Location /api>
         ProxyPass ajp://localhost:9000/api
