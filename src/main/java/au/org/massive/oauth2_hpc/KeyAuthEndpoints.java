@@ -1,17 +1,12 @@
 package au.org.massive.oauth2_hpc;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.security.InvalidKeyException;
-import java.security.SignatureException;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import au.org.massive.oauth2_hpc.ssh.RSAPublicKeyCodec;
+import au.org.massive.oauth2_hpc.ssh.SSHCertificateGenerator;
+import au.org.massive.oauth2_hpc.ssh.SSHCertificateGenerator.SSHCertType;
+import au.org.massive.oauth2_hpc.ssh.SSHCertificateOptions;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import org.apache.log4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,14 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import au.org.massive.oauth2_hpc.ssh.RSAPublicKeyCodec;
-import au.org.massive.oauth2_hpc.ssh.SSHCertificateGenerator;
-import au.org.massive.oauth2_hpc.ssh.SSHCertificateGenerator.SSHCertType;
-import au.org.massive.oauth2_hpc.ssh.SSHCertificateOptions;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.InetAddress;
+import java.security.InvalidKeyException;
+import java.security.SignatureException;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Controller class for the key signing endpoint

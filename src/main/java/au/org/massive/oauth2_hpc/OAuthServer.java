@@ -25,6 +25,7 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
  * OAuth2 authorisation server
@@ -68,15 +69,15 @@ public class OAuthServer extends AuthorizationServerConfigurerAdapter {
 
 			@Override
 			public OAuth2AccessToken enhance(OAuth2AccessToken token,
-					OAuth2Authentication auth) {
+											 OAuth2Authentication auth) {
 				UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
-				Map<String,Object> additionalInformation = new HashMap<String,Object>();
+				Map<String, Object> additionalInformation = new HashMap<String, Object>();
 				additionalInformation.putAll(token.getAdditionalInformation());
 				additionalInformation.put("email", userDetails.getEmail());
 				((DefaultOAuth2AccessToken) token).setAdditionalInformation(additionalInformation);
 				return token;
 			}
-			
+
 		});
 		tokenEnhancers.add(jwtAccessTokenConverter());
 		tokenEnhancerChain.setTokenEnhancers(tokenEnhancers);

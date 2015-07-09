@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -38,6 +39,14 @@ public class ApplicationEntrypoint {
 	    myFactory.setProtocol(settings.getTomcatProtocol());
 	    myFactory.setPort(settings.getTomcatPort());
 	    return myFactory;
+	}
+
+	@Bean
+	public InternalResourceViewResolver setupViewResolver() {
+		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+		resolver.setPrefix("/jsp/");
+		resolver.setSuffix(".jsp");
+		return resolver;
 	}
 	
 }
