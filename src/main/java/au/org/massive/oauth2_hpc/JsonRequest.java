@@ -18,7 +18,7 @@ import com.google.gson.JsonSyntaxException;
  *
  */
 public class JsonRequest {
-	private static Logger log = Logger.getLogger(JsonRequest.class.getName());
+	private static final Logger log = Logger.getLogger(JsonRequest.class.getName());
 	
 	private JsonRequest() {
 		

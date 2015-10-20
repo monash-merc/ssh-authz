@@ -36,8 +36,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableAuthorizationServer
 public class OAuthServer extends AuthorizationServerConfigurerAdapter {
 	
-	private static Logger log = Logger.getLogger(OAuthServer.class.getName());
-	private static Settings settings = Settings.getInstance();
+	private static final Logger log = Logger.getLogger(OAuthServer.class.getName());
+	private static final Settings settings = Settings.getInstance();
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;

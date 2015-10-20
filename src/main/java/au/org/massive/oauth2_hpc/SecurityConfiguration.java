@@ -20,15 +20,14 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
-	private PreAuthenticatedAuthenticationProvider preAuthenticatedProvider;
-	private UserDetailsService userDetailsService;
+	private final PreAuthenticatedAuthenticationProvider preAuthenticatedProvider;
 
 	public SecurityConfiguration() {
 		super();
-		
-		userDetailsService = new LdapUserDetailsService();
+
+		UserDetailsService userDetailsService = new LdapUserDetailsService();
         UserDetailsByNameServiceWrapper<PreAuthenticatedAuthenticationToken> wrapper = new UserDetailsByNameServiceWrapper<PreAuthenticatedAuthenticationToken>(
-                userDetailsService);
+				userDetailsService);
 
         preAuthenticatedProvider = new PreAuthenticatedAuthenticationProvider();
         preAuthenticatedProvider.setPreAuthenticatedUserDetailsService(wrapper);

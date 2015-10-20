@@ -35,7 +35,7 @@ import au.org.massive.oauth2_hpc.ssh.RSAPublicKeyCodec;
  */
 public class Settings {
 	
-	private static Logger log = Logger.getLogger(Settings.class.getName());
+	private static final Logger log = Logger.getLogger(Settings.class.getName());
 	private static Settings instance;
 	private Configuration config;
 	private static KeyPair jwtSigningKeypair;

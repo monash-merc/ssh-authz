@@ -28,7 +28,7 @@ import au.org.massive.oauth2_hpc.Settings;
  *
  */
 public class KeyCodec {
-	private static Logger log = Logger.getLogger(Settings.class.getName());
+	private static final Logger log = Logger.getLogger(Settings.class.getName());
 	
 	protected KeyCodec() {
 		
