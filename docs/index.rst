@@ -6,11 +6,17 @@
 Welcome to SSH-AuthZ's documentation!
 =====================================
 
+SSH-AuthZ is a `SSH certificate`_ signing server that uses an OAuth2 authorisation flow.
+
+.. _SSH certificate: http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/PROTOCOL.certkeys?rev=1.9&content-type=text/x-cvsweb-markup
+
 Contents:
 
 .. toctree::
    :maxdepth: 2
 
+   administration-guide
+   development-guide
 
 
 Indices and tables
