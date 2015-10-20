@@ -19,9 +19,4 @@ public class ShibbolethHeaderAuthenticationFilter extends RequestHeaderAuthentic
 		setExceptionIfHeaderMissing(false);
 	}
 
-	@Override
-	protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
-		return super.getPreAuthenticatedPrincipal(request);
-	}
-
 }

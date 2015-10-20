@@ -32,7 +32,7 @@ import java.util.Map;
 @RestController
 public class KeyAuthEndpoints {
 
-	private static Logger log = Logger.getLogger(KeyAuthEndpoints.class.getName());
+	private static final Logger log = Logger.getLogger(KeyAuthEndpoints.class.getName());
 
 	private static final Settings settings = Settings.getInstance();
 

@@ -26,8 +26,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  */
 public class LdapUserDetailsService implements UserDetailsService {
 	
-	private static Logger log = Logger.getLogger(LdapUserDetailsService.class.getName());
-	private static Settings settings = Settings.getInstance();
+	private static final Logger log = Logger.getLogger(LdapUserDetailsService.class.getName());
+	private static final Settings settings = Settings.getInstance();
 
 	/**
 	 * Queries LDAP for the given user
@@ -69,7 +69,7 @@ public class LdapUserDetailsService implements UserDetailsService {
 	
 	/**
 	 * Converts an LDAP search result into a {@link UserDetails} object
-	 * @param massiveLdapSearchResult
+	 * @param massiveLdapSearchResult the ldap search result
 	 * @return a UserDetails object
 	 * @throws NamingException if the <pre>uid</pre> attribute does not exist
 	 */
@@ -77,8 +77,7 @@ public class LdapUserDetailsService implements UserDetailsService {
 		String userId = (String) massiveLdapSearchResult.getAttributes().get("uid").get();
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-		UserDetails user = new UserDetailsImpl(userId, "password", email, authorities);
-        return user;
+		return new UserDetailsImpl(userId, "password", email, authorities);
 	}
 
 	/**

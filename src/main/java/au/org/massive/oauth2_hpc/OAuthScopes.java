@@ -8,7 +8,7 @@ package au.org.massive.oauth2_hpc;
 public enum OAuthScopes {
 	HPC_ACCOUNT_ACCESS;
 	
-	private OAuthScopes() {
+	OAuthScopes() {
 	}
 	
 	/**

@@ -18,11 +18,11 @@ import java.net.UnknownHostException;
 @SpringBootApplication
 public class ApplicationEntrypoint {
 	
-	private static Settings settings = Settings.getInstance();
+	private static final Settings settings = Settings.getInstance();
 
 	/**
 	 * Starts the inbuilt Tomcat server
-	 * @param args
+	 * @param args command line arguments
 	 */
 	public static void main(String[] args) {
 		SpringApplication.run(ApplicationEntrypoint.class, args);
@@ -30,7 +30,7 @@ public class ApplicationEntrypoint {
 	
 	/**
 	 * Sets the Tomcat server port / protocol according to the configuration file
-	 * @return
+	 * @return a configured container factory
 	 */
 	@Bean
 	public EmbeddedServletContainerFactory tomcat() throws UnknownHostException {

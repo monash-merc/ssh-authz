@@ -99,7 +99,7 @@ public class SSHCertificateOptions {
 		private long serial;
 		private String keyId;
 		private SSHCertType type;
-		private List<String> principals;
+		private final List<String> principals;
 		private long validBefore;
 		private long validAfter;
 		private Map<SSHCriticalOptions, String> criticalOpts;

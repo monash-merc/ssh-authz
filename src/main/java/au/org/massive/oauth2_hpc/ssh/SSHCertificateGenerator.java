@@ -40,8 +40,8 @@ public class SSHCertificateGenerator {
 	public enum SSHCertType {
 		SSH_CERT_TYPE_USER(1),
 		SSH_CERT_TYPE_HOST(2);
-		private int idx;
-		private SSHCertType(int idx) {
+		private final int idx;
+		SSHCertType(int idx) {
 			this.idx = idx;
 		}
 		public int getValue() {
@@ -55,7 +55,7 @@ public class SSHCertificateGenerator {
 	 *
 	 */
 	private interface SSHOptions {
-		public String getValue();
+		String getValue();
 	}
 	
 	/**
@@ -83,8 +83,8 @@ public class SSHCertificateGenerator {
 		PERMIT_PORT_FORWARDING("permit-port-forwarding"),
 		PERMIT_PTY("permit-pty"),
 		PERMIT_USER_RC("permit-user-rc");
-		private String value;
-		private SSHExtensions(String value) {
+		private final String value;
+		SSHExtensions(String value) {
 			this.value = value;
 		}
 		public String getValue() {
@@ -100,8 +100,8 @@ public class SSHCertificateGenerator {
 	public enum SSHCriticalOptions implements SSHOptions {
 		FORCE_COMMAND("force-command"),
 		SOURCE_ADDRESS("source-address");
-		private String value;
-		private SSHCriticalOptions(String value) {
+		private final String value;
+		SSHCriticalOptions(String value) {
 			this.value = value;
 		}
 		public String getValue() {
