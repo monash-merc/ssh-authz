@@ -41,7 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		ShibbolethHeaderAuthenticationFilter shibbolethFilter = new ShibbolethHeaderAuthenticationFilter();
+		HeaderAuthenticationFilter shibbolethFilter = new HeaderAuthenticationFilter();
 		shibbolethFilter.setAuthenticationManager(authenticationManager());
 		http.addFilter(shibbolethFilter)
 				.authorizeRequests()
