@@ -97,6 +97,8 @@ public class Settings {
 	public String getLdapSearchFilter() {
 		return concatList("ldap-search-filter", ",");
 	}
+
+	public String getUpstreamAuthHeaderName() { return config.getString("upstream-auth-header-name", "mail"); }
 	
 	public KeyPair getJWTSigningKeyPair() {
 		// Key already loaded? Return it
