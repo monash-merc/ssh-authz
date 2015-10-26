@@ -60,7 +60,7 @@ public class KeyAuthEndpoints {
 						throw new InvalidKeyException();
 					}
 
-					RSAPublicKey publicKey = RSAPublicKeyCodec.decodeKeyFromSSHBase64Format((String)data.get("public_key"));
+					RSAPublicKey publicKey = RSAPublicKeyCodec.decodeKeyFromSSHBase64Format(pubKeyString);
 					RSAPublicKey caPublicKey = settings.getCAPublicKey();
 					RSAPrivateKey caPrivateKey = settings.getCAPrivateKey();
 
