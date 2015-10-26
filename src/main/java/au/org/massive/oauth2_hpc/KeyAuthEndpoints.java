@@ -53,21 +53,22 @@ public class KeyAuthEndpoints {
 			String remoteHPCUser = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 			try {
-				Map<String,String> data = JsonRequest.processJsonRequest(request);
-				String pubKeyString = data.get("public_key");
+				Map<String,Object> data = JsonRequest.processJsonRequest(request);
+				String pubKeyString = (String)data.get("public_key");
 				try {
 					if (pubKeyString == null || pubKeyString.isEmpty()) {
 						throw new InvalidKeyException();
 					}
 
-					RSAPublicKey publicKey = RSAPublicKeyCodec.decodeKeyFromSSHBase64Format(data.get("public_key"));
+					RSAPublicKey publicKey = RSAPublicKeyCodec.decodeKeyFromSSHBase64Format(pubKeyString);
 					RSAPublicKey caPublicKey = settings.getCAPublicKey();
 					RSAPrivateKey caPrivateKey = settings.getCAPrivateKey();
 
 					int requestedValidity = settings.getMaxSSHCertValidity();
 					try {
 						if (data.get("valid_for") != null) {
-							requestedValidity = Integer.valueOf(data.get("valid_for"));
+							Object valid_for = data.get("valid_for");
+							requestedValidity = (valid_for instanceof String)?Integer.valueOf((String)valid_for):(int)Math.round((Double)valid_for);
 							if (requestedValidity <= 0) {
 								throw new JsonSyntaxException("expected integer for \"valid_for\" field");
 							} else if (requestedValidity > settings.getMaxSSHCertValidity()) {
