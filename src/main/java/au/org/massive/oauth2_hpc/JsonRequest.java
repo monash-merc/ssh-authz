@@ -40,13 +40,13 @@ public class JsonRequest {
 	}
 	
 	/**
-	 * Converts a simple key/value json request to a <pre>Map&lt;String,String&gt;</pre> object
+	 * Converts a simple key/value json request to a <pre>Map&lt;String,Object&gt;</pre> object
 	 * @param request the requst from which to extract the json request
 	 * @return a Map of the key/value data
 	 * @throws JsonSyntaxException if the request contains invalid json
 	 */
 	@SuppressWarnings("unchecked")
-	public static Map<String,String> processJsonRequest(HttpServletRequest request) throws JsonSyntaxException {
+	public static Map<String,Object> processJsonRequest(HttpServletRequest request) throws JsonSyntaxException {
 		Gson gson = new Gson();
 		try {
 			String requestBody = getRequestBody(request);
