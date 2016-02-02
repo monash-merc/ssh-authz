@@ -69,6 +69,10 @@ public class Settings {
 		}
 		return sb.toString();
 	}
+
+	public String getCacheFileLocation() {
+		return config.getString("cache-file", "ssh-authz-cache.db");
+	}
 	
 	public String getTomcatProtocol() { return config.getString("tomcat-protocol", "AJP/1.3"); }
 	
