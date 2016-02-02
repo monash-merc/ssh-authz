@@ -73,6 +73,10 @@ public class Settings {
 	public String getCacheFileLocation() {
 		return config.getString("cache-file", "ssh-authz-cache.db");
 	}
+
+	public long getCacheExpiryHours() {
+		return config.getLong("cache-expiry-hours", 24);
+	}
 	
 	public String getTomcatProtocol() { return config.getString("tomcat-protocol", "AJP/1.3"); }
 	
