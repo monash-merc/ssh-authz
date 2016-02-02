@@ -3,10 +3,12 @@ package au.org.massive.oauth2_hpc;
 import org.apache.log4j.Logger;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
+import org.mapdb.HTreeMap;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Abstracts a file-based cache of key/values
@@ -55,8 +57,29 @@ public abstract class DiskCache {
         }
     }
 
-    protected <K,V> Map<K,V> getCache(String name) {
-        return db.treeMap(name);
+    public class Expiry {
+        private long duration;
+        private TimeUnit unit;
+        public Expiry(long duration, TimeUnit unit) {
+            this.duration = duration;
+            this.unit = unit;
+        }
+
+        private long getDuration() {
+            return duration;
+        }
+
+        private TimeUnit getUnit() {
+            return unit;
+        }
+    }
+
+    protected <K,V> Map<K,V> getCache(String name, Expiry expiry) {
+        DB.HTreeMapMaker mapMaker = db.hashMapCreate(name);
+        if (expiry != null) {
+            mapMaker.expireAfterAccess(expiry.getDuration(), expiry.getUnit());
+        }
+        return mapMaker.makeOrGet();
     }
 
     public void commit() {

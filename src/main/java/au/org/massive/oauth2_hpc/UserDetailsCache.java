@@ -3,6 +3,7 @@ package au.org.massive.oauth2_hpc;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Stores and retrieves user details in a disk-based cache
@@ -10,9 +11,11 @@ import java.util.Map;
  */
 public class UserDetailsCache extends DiskCache {
     private Map<String, UserDetails> userData;
+    private final static Settings settings = Settings.getInstance();
 
     public UserDetailsCache() {
-        userData = getCache("user-details");
+        userData = getCache("user-details",
+                new DiskCache.Expiry(settings.getCacheExpiryHours(), TimeUnit.HOURS));
     }
 
     /**
