@@ -36,7 +36,14 @@ public class LdapUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String userName)
 			throws UsernameNotFoundException {
-		
+		UserDetailsCache userCache = new UserDetailsCache();
+		UserDetails userFromCache = userCache.getUserDetails(userName);
+		if (userFromCache != null) {
+			log.info("User lookup cache hit: mapped user "+userName+" to "+userFromCache.getUsername());
+			return userFromCache;
+		} else {
+			log.info("User lookup cache miss; querying LDAP...");
+		}
 		try {
 			// Set up the environment for creating the initial context
 			Hashtable<String, String> env = new Hashtable<String, String>();
@@ -55,6 +62,8 @@ public class LdapUserDetailsService implements UserDetailsService {
 			if (results.hasMore()) {
 				UserDetails userObject = createUserObject(results.next(), userName);
 				log.info("Mapped "+userName+" to LDAP uid "+userObject.getUsername());
+				userCache.saveUserDetails(userName, userObject);
+				log.info("User details stored in cache.");
 				return userObject;
 			} else {
 				log.info("Could not find "+userName+" in LDAP");
