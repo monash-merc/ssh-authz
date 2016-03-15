@@ -37,6 +37,9 @@ protected with configuration similar to the following::
     <Location /oauth/token>
         ProxyPass ajp://localhost:9000/oauth/token
     </Location>
+    <Location /oauth/login_error>
+        ProxyPass ajp://localhost:9000/oauth/login_error
+    </Location>
     <Location /oauth/token_key>
         ProxyPass ajp://localhost:9000/oauth/token_key
     </Location>
