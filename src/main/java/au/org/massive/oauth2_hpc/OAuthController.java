@@ -42,4 +42,9 @@ public class OAuthController {
         return new ModelAndView("access_confirmation", model);
     }
 
+    @RequestMapping(value="/error")
+    public ModelAndView loginError(Map<String,Object> model, HttpServletRequest request) {
+        return new ModelAndView("error", model);
+    }
+
 }
