@@ -47,9 +47,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers("/oauth/authorize").fullyAuthenticated()
 				.and()
-				.exceptionHandling().accessDeniedPage("/oauth/login_error")
-				.and()
 				.csrf().disable();
+		http.exceptionHandling().accessDeniedPage("/oauth/authorize");
 	}
 
 	@Override
