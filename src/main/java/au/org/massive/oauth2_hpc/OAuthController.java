@@ -42,9 +42,4 @@ public class OAuthController {
         return new ModelAndView("access_confirmation", model);
     }
 
-    @RequestMapping(value="/oauth/login_error")
-    public String loginError() {
-        return "login_error";
-    }
-
 }
