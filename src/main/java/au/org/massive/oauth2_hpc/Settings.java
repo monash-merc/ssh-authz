@@ -105,6 +105,10 @@ public class Settings {
 	public String getLdapSearchFilter() {
 		return concatList("ldap-search-filter", ",");
 	}
+	
+	public Boolean getLdapSearchSubtree() {
+		return config.getBoolean("ldap-search-subtree", true);
+	}
 
 	public String getUpstreamAuthHeaderName() { return config.getString("upstream-auth-header-name", "mail"); }
 	

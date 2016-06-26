@@ -58,7 +58,11 @@ public class LdapUserDetailsService implements UserDetailsService {
 			}
 			DirContext ctx = new InitialDirContext(env);
 			String searchFilter = String.format(settings.getLdapSearchFilter(), escapeLDAPSearchFilter(userName));
-			NamingEnumeration<SearchResult> results = ctx.search(settings.getLdapSearchBaseDn(), searchFilter, new SearchControls());
+			SearchControls searchControls = new SearchControls();
+			if (settings.getLdapSearchSubtree()) {
+				searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+			}
+			NamingEnumeration<SearchResult> results = ctx.search(settings.getLdapSearchBaseDn(), searchFilter, searchControls);
 			if (results.hasMore()) {
 				UserDetails userObject = createUserObject(results.next(), userName);
 				log.info("Mapped "+userName+" to LDAP uid "+userObject.getUsername());
