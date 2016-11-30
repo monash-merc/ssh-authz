@@ -85,6 +85,7 @@ public class Settings {
 	}
 
 	public String getTomcatBindAddress() { return config.getString("tomcat-bind-address", "localhost"); }
+
 	
 	public String getLdapProviderUrl() {
 		return config.getString("ldap-provider-url");
@@ -110,7 +111,40 @@ public class Settings {
 		return config.getBoolean("ldap-search-subtree", true);
 	}
 
+	// **** Authentication options START ****
+	public AuthenticationMode getAuthenticaionMethod() {
+		String method = config.getString("authentication-method", "http_headers");
+		try {
+			return AuthenticationMode.getMethod(method);
+		} catch (IllegalArgumentException e) {
+			AuthenticationMode authenticationMode = AuthenticationMode.HTTP_HEADERS;
+			log.warn("Authentication method " + method + " is invalid; using default: " + authenticationMode.name());
+			log.warn("Valid choices are: ");
+			for (AuthenticationMode m : AuthenticationMode.values()) {
+				log.warn(" * " + m.name());
+			}
+			return authenticationMode;
+		}
+	}
+
+	public String getOIDCIssuer() {
+		return config.getString("oidc-issuer");
+	}
+
+	public String getOIDCClientId() {
+		return config.getString("oidc-client-id");
+	}
+
+	public String getOIDCClientSecret() {
+		return config.getString("oidc-client-secret");
+	}
+
+	public String getOIDCRedirectURI() {
+		return config.getString("oidc-redirect-uri");
+	}
+
 	public String getUpstreamAuthHeaderName() { return config.getString("upstream-auth-header-name", "mail"); }
+	// **** Authentication options END ****
 	
 	public KeyPair getJWTSigningKeyPair() {
 		// Key already loaded? Return it
