@@ -112,7 +112,7 @@ public class Settings {
 	}
 
 	// **** Authentication options START ****
-	public AuthenticationMode getAuthenticaionMethod() {
+	public AuthenticationMode getAuthenticaionMode() {
 		String method = config.getString("authentication-method", "http_headers");
 		try {
 			return AuthenticationMode.getMethod(method);
