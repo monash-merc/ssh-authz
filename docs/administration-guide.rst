@@ -32,7 +32,8 @@ Integration with OpenID Connect
 SSH-AuthZ now supports authenticating via an upstream OIDC provider and can be configured by setting the
 :code:`authentication-method` to "oidc" and then linking to the correct issuer via the settings prefixed
 with "oidc" in the configuration file. Certificates will be issued in the name of the :code:`sub` claim
-of the upstream provider.
+of the upstream provider, thus it is essential that you trust the OIDC provider to map users to their
+correct POSIX user accounts.
 
 Integration with mod_shib
 ~~~~~~~~~~~~~~~~~~~~~~~~~
