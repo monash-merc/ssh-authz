@@ -1,11 +1,14 @@
 package au.org.massive.oauth2_hpc;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.nimbusds.jwt.JWTClaimsSet;
 import org.apache.log4j.Logger;
+import org.mitre.openid.connect.model.OIDCAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -65,20 +68,57 @@ public class OAuthServer extends AuthorizationServerConfigurerAdapter {
 	public TokenEnhancerChain tokenEnhancerChain() {
 		TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
 		List<TokenEnhancer> tokenEnhancers = new LinkedList<TokenEnhancer>();
-		tokenEnhancers.add(new TokenEnhancer() {
 
+		tokenEnhancers.add(new TokenEnhancer() {
 			@Override
-			public OAuth2AccessToken enhance(OAuth2AccessToken token,
-											 OAuth2Authentication auth) {
-				UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+			public OAuth2AccessToken enhance(OAuth2AccessToken token, OAuth2Authentication auth) {
 				Map<String, Object> additionalInformation = new HashMap<String, Object>();
 				additionalInformation.putAll(token.getAdditionalInformation());
-				additionalInformation.put("email", userDetails.getEmail());
+				additionalInformation.put("email", "");
 				((DefaultOAuth2AccessToken) token).setAdditionalInformation(additionalInformation);
 				return token;
 			}
-
 		});
+
+		// Token enhancers to get extra user information
+		switch (settings.getAuthenticaionMode()) {
+			case OIDC:
+				tokenEnhancers.add(new TokenEnhancer() {
+					@Override
+					public OAuth2AccessToken enhance(OAuth2AccessToken token, OAuth2Authentication auth) {
+						OIDCAuthenticationToken oidcAuthenticationToken = (OIDCAuthenticationToken)auth.getUserAuthentication();
+						Map<String, Object> additionalInformation = new HashMap<String, Object>();
+						additionalInformation.putAll(token.getAdditionalInformation());
+						try {
+							JWTClaimsSet claimsSet = oidcAuthenticationToken.getIdToken().getJWTClaimsSet();
+							additionalInformation.put("email", claimsSet.getStringClaim("email"));
+							additionalInformation.put("user_name", claimsSet.getStringClaim("sub"));
+						} catch (ParseException e) {
+							log.error("Could not parse OIDC claims!");
+						}
+						((DefaultOAuth2AccessToken) token).setAdditionalInformation(additionalInformation);
+						return token;
+					}
+				});
+				break;
+			case HTTP_HEADERS:
+			default:
+				tokenEnhancers.add(new TokenEnhancer() {
+
+					@Override
+					public OAuth2AccessToken enhance(OAuth2AccessToken token,
+													 OAuth2Authentication auth) {
+
+						UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+						Map<String, Object> additionalInformation = new HashMap<String, Object>();
+						additionalInformation.putAll(token.getAdditionalInformation());
+						additionalInformation.put("email", userDetails.getEmail());
+						((DefaultOAuth2AccessToken) token).setAdditionalInformation(additionalInformation);
+						return token;
+					}
+
+				});
+		}
 		tokenEnhancers.add(jwtAccessTokenConverter());
 		tokenEnhancerChain.setTokenEnhancers(tokenEnhancers);
 		return tokenEnhancerChain;

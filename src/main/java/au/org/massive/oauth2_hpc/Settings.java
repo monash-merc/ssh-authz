@@ -10,8 +10,7 @@ import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -26,6 +25,7 @@ import org.apache.log4j.Logger;
 import au.org.massive.oauth2_hpc.ssh.KeyCodec;
 import au.org.massive.oauth2_hpc.ssh.RSAPrivateKeyCodec;
 import au.org.massive.oauth2_hpc.ssh.RSAPublicKeyCodec;
+import org.mitre.oauth2.model.ClientDetailsEntity.AuthMethod;
 
 /**
  * Class that provides an abstraction from the configuration files, and sensible defaults if
@@ -70,6 +70,14 @@ public class Settings {
 		return sb.toString();
 	}
 
+	public List<String> getUserBlacklist() {
+		List<String> userBlacklist = new LinkedList<>();
+		for (Object u : config.getList("user-blacklist")) {
+			userBlacklist.add((String) u);
+		}
+		return userBlacklist;
+	}
+
 	public String getCacheFileLocation() {
 		return config.getString("cache-file", "ssh-authz-cache.db");
 	}
@@ -85,6 +93,7 @@ public class Settings {
 	}
 
 	public String getTomcatBindAddress() { return config.getString("tomcat-bind-address", "localhost"); }
+
 	
 	public String getLdapProviderUrl() {
 		return config.getString("ldap-provider-url");
@@ -110,7 +119,57 @@ public class Settings {
 		return config.getBoolean("ldap-search-subtree", true);
 	}
 
+	// **** Authentication options START ****
+	public AuthenticationMode getAuthenticaionMode() {
+		String method = config.getString("authentication-method", "http_headers");
+		try {
+			return AuthenticationMode.getMethod(method);
+		} catch (IllegalArgumentException e) {
+			AuthenticationMode authenticationMode = AuthenticationMode.HTTP_HEADERS;
+			log.warn("Authentication method " + method + " is invalid; using default: " + authenticationMode.name());
+			log.warn("Valid choices are: ");
+			for (AuthenticationMode m : AuthenticationMode.values()) {
+				log.warn(" * " + m.name());
+			}
+			return authenticationMode;
+		}
+	}
+
+	public boolean ignoreSecurityWarnings() {
+		return config.getBoolean("ignore-security-warnings", false);
+	}
+
+	public String getOIDCIssuer() {
+		return config.getString("oidc-issuer");
+	}
+
+	public String getOIDCClientId() {
+		return config.getString("oidc-client-id");
+	}
+
+	public String getOIDCClientSecret() {
+		return config.getString("oidc-client-secret");
+	}
+
+	public String getOIDCRedirectURI() {
+		return config.getString("oidc-redirect-uri");
+	}
+
+	public AuthMethod getOIDCAuthMethod() {
+		return AuthMethod.getByValue(config.getString("oidc-auth-method", "client_secret_basic"));
+	}
+
+	public HashSet<String> getOIDCScopes() {
+		List<Object> scopes = config.getList("oidc-scopes", Arrays.asList("openid", "email", "offline_access", "profile"));
+		HashSet<String> scopeSet = new HashSet<String>();
+		for (Object s : scopes) {
+			scopeSet.add((String) s);
+		}
+		return scopeSet;
+	}
+
 	public String getUpstreamAuthHeaderName() { return config.getString("upstream-auth-header-name", "mail"); }
+	// **** Authentication options END ****
 	
 	public KeyPair getJWTSigningKeyPair() {
 		// Key already loaded? Return it
