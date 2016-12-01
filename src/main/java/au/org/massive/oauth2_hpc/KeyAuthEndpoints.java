@@ -36,6 +36,15 @@ public class KeyAuthEndpoints {
 
 	private static final Settings settings = Settings.getInstance();
 
+	public boolean isUserBlackListed(String user) {
+		for (String u : settings.getUserBlacklist()) {
+			if (u.toLowerCase().equals(user.toLowerCase())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Key signing endpoint protected by OAuth2.
 	 * Accepts a public key and optional valid period and returns a signed certificate.
@@ -51,8 +60,11 @@ public class KeyAuthEndpoints {
 		try {
 			Map<String,String> responseMessage = new HashMap<String,String>();
 			String remoteHPCUser = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
 			try {
+				if (isUserBlackListed(remoteHPCUser)) {
+					throw new UserBlacklistedException();
+				}
+
 				Map<String,Object> data = JsonRequest.processJsonRequest(request);
 				String pubKeyString = (String)data.get("public_key");
 				try {
@@ -102,6 +114,10 @@ public class KeyAuthEndpoints {
 					responseMessage.put("error", "Server configured to sign certificates with a maximum duration of "+settings.getMaxSSHCertValidity()+" days");
 					response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 				}
+			} catch (UserBlacklistedException e) {
+				log.info("Refused to sign certificate for "+remoteHPCUser+" because the user is blacklisted.");
+				responseMessage.put("error", "User blacklisted");
+				response.sendError(HttpServletResponse.SC_FORBIDDEN);
 			} catch (JsonSyntaxException e) {
 				log.info("Couldn't understand signing request made by "+remoteHPCUser);
 				responseMessage.put("error", "Malformed request");

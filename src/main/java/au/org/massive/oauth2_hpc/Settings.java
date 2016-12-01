@@ -10,10 +10,7 @@ import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -71,6 +68,14 @@ public class Settings {
 			sb.append((String) item);
 		}
 		return sb.toString();
+	}
+
+	public List<String> getUserBlacklist() {
+		List<String> userBlacklist = new LinkedList<>();
+		for (Object u : config.getList("user-blacklist")) {
+			userBlacklist.add((String) u);
+		}
+		return userBlacklist;
 	}
 
 	public String getCacheFileLocation() {
