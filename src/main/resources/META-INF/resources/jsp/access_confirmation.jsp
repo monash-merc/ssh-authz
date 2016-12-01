@@ -17,12 +17,12 @@
      </script>
 
       <md-content layout-padding style="padding: 24px;">
-        <h2 class="md-title"><strong>${client.clientId}</strong> is requesting permission to act on your behalf</h2>
+        <h2 class="md-title"><strong>${client.clientName}</strong> is requesting permission to act on your behalf</h2>
         <md-card>
             <md-card-content>
-                <strong>${client.clientId}</strong> would like to:
+                <strong>${client.clientName}</strong> would like to:
                 <ul>
-                    <li>Access your MASSIVE and/or CVL account</li>
+                    <li>Access ${remote_system_name}</li>
                 </ul>
             </md-card-content>
         </md-card>
@@ -30,7 +30,7 @@
             <form id='confirmationForm' name='confirmationForm' action='authorize' method='post' ng-init='hpcAccountAccess = false;'>
                 <input name='user_oauth_approval' value='true' type='hidden'/>
                 <input name='scope.HPC_ACCOUNT_ACCESS' ng-value='hpcAccountAccess' type='hidden'>
-                <md-button class="md-raised md-primary" ng-click="hpcAccountAccess = true;">Sounds good to me</md-button>
+                <md-button class="md-raised md-primary" ng-click="hpcAccountAccess = true;">I agree</md-button>
                 <md-button class="md-raised md-warn" ng-click="hpcAccountAccess = false;">No thanks</md-button>
             </form>
         </section>

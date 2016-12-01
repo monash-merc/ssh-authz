@@ -229,6 +229,10 @@ public class Settings {
 	public int getMaxSSHCertValidity() {
 		return config.getInt("ssh-cert-max-valid-days", 1);
 	}
+
+	public String getRemoteResourceName() {
+		return config.getString("remote-resource-name", "remote systems on your behalf using an SSH certificate");
+	}
 	
 	public Set<RegisteredClient> getRegisteredClients() throws ConfigurationException {
 		String file = getRegisteredClientsConfigFile();
