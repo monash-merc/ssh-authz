@@ -121,7 +121,7 @@
 		<dependency>
 			<groupId>org.mitre</groupId>
 			<artifactId>openid-connect-client</artifactId>
-			<version>1.2.6</version>
+			<version>1.2.2</version> <!-- Use v1.2.2 due to GitHub issue https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server/issues/1144 -->
 		</dependency>
 
 	</dependencies>
