@@ -35,6 +35,7 @@ import java.util.HashSet;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final Logger log = Logger.getLogger(SecurityConfiguration.class.getName());
+    private static final Settings settings = Settings.getInstance();
 
     public SecurityConfiguration() {
         super();
@@ -44,7 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
 
-        switch (Settings.getInstance().getAuthenticaionMode()) {
+        switch (settings.getAuthenticaionMode()) {
             case OIDC:
                 auth.authenticationProvider(new OIDCAuthenticationProvider());
                 break;
@@ -61,7 +62,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     private Filter getAuthFilter() throws Exception {
-        switch (Settings.getInstance().getAuthenticaionMode()) {
+        switch (settings.getAuthenticaionMode()) {
             case OIDC: {
                 return openIdConnectAuthenticationFilter();
             }
@@ -92,13 +93,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 client.setClientId(Settings.getInstance().getOIDCClientId());
                 client.setClientSecret(Settings.getInstance().getOIDCClientSecret());
 
-                client.setScope(new HashSet<String>(Arrays.asList("openid",
-                        "email", "offline_access", "profile")));
+                client.setScope(settings.getOIDCScopes());
                 HashSet<String> redirect = new HashSet<String>();
                 redirect.add(Settings.getInstance().getOIDCRedirectURI());
                 client.setRedirectUris(redirect);
-
-                client.setTokenEndpointAuthMethod(ClientDetailsEntity.AuthMethod.SECRET_BASIC);
+                client.setTokenEndpointAuthMethod(settings.getOIDCAuthMethod());
 
                 return client;
             }
@@ -115,10 +114,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable();
 
-        if (Settings.getInstance().getAuthenticaionMode() != AuthenticationMode.OIDC) {
-            http.exceptionHandling().accessDeniedPage("/403");
-        } else {
-            http.exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/openid_connect_login"));
+        switch (settings.getAuthenticaionMode()) {
+            case OIDC:
+                // OIDC should redirect to the login endpoint if not authenticated
+                http.exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/openid_connect_login"));
+                break;
+            case HTTP_HEADERS:
+            default:
+                // Otherwise tell the user that they're not authorized, assuming an upstream (i.e. apache mod_shib)
+                // has authenticated them.
+                http.exceptionHandling().accessDeniedPage("/403");
         }
     }
 
