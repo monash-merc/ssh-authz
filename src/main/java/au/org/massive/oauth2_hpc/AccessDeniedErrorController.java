@@ -14,12 +14,12 @@ import java.util.Map;
  * Created by jason on 21/03/2016.
  */
 @Controller
-public class ErrorController {
+public class AccessDeniedErrorController {
     private static final String PATH = "/403";
-    private static final Logger log = Logger.getLogger(ErrorController.class.getName());
+    private static final Logger log = Logger.getLogger(AccessDeniedErrorController.class.getName());
 
     @RequestMapping(value = PATH)
-    public ModelAndView error(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+    public ModelAndView error(HttpServletRequest request, HttpServletResponse response) {
         Map<String,Object> model = new HashMap<String,Object>();
         return new ModelAndView("login_error", model);
     }
