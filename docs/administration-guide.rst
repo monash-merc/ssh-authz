@@ -27,12 +27,19 @@ example clients file follows:
 .. literalinclude:: ../config_example/clients.xml
    :linenos:
 
+Integration with OpenID Connect
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+SSH-AuthZ now supports authenticating via an upstream OIDC provider and can be configured by setting the
+:code:`authentication-method` to "oidc" and then linking to the correct issuer via the settings prefixed
+with "oidc" in the configuration file. Certificates will be issued in the name of the :code:`sub` claim
+of the upstream provider.
+
 Integration with mod_shib
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-SSH-AuthZ expects to have its :code:`/oauth/authorize` endpoint protected by mod_shib and matched users based on the
-mail header (email address) sent after the user is authenticated. This must be done by Apache HTTPd before the request
-reaches SSH-AuthZ. Configuring mod_shib is beyond the scope of this readme, however the endpoints themselves may be
-protected with configuration similar to the following::
+In HTTP_HEADERS authentication mode, SSH-AuthZ expects to have its :code:`/oauth/authorize` endpoint protected by
+mod_shib and matched users based on the mail header (email address) sent after the user is authenticated. This
+must be done by Apache HTTPd before the request reaches SSH-AuthZ. Configuring mod_shib is beyond the scope of
+this readme, however the endpoints themselves may be protected with configuration similar to the following::
 
     <Location /oauth/token>
         ProxyPass ajp://localhost:9000/oauth/token
@@ -220,7 +227,7 @@ Here is an example init script for SSH-AuthZ::
 This init script references a wrapper script for starting the jar file. The wrapper script looks something similar to::
 
    #!/bin/bash
-   VERSION="0.0.1-SNAPSHOT"
+   VERSION="1.1.0-SNAPSHOT"
    JAR_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
    cd $JAR_DIR
    exec java -jar ssh-authz-$VERSION.jar >> /opt/ssh-authz-server/log/server.log 2>&1
