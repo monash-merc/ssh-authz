@@ -1,5 +1,6 @@
 package au.org.massive.oauth2_hpc;
 
+import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
@@ -19,6 +20,7 @@ import java.net.UnknownHostException;
 public class ApplicationEntrypoint {
 	
 	private static final Settings settings = Settings.getInstance();
+	private static final Logger log = Logger.getLogger(OAuthServer.class.getName());
 
 	/**
 	 * Starts the inbuilt Tomcat server
@@ -35,6 +37,15 @@ public class ApplicationEntrypoint {
 	@Bean
 	public EmbeddedServletContainerFactory tomcat() throws UnknownHostException {
 	    TomcatEmbeddedServletContainerFactory myFactory = new TomcatEmbeddedServletContainerFactory();
+	    if (!settings.getTomcatBindAddress().toLowerCase().equals("localhost") &&
+				settings.getAuthenticaionMode() == AuthenticationMode.HTTP_HEADERS) {
+	    	log.error("You are using the HTTP_HEADERS method of authentication but not binding to localhost. " +
+					"Make sure you lock down your server to prevent malicious HTTP request headers being supplied.");
+	    	if (!settings.ignoreSecurityWarnings()) {
+	    		log.info("The server will now exit. Please set `ignore-security-warnings` to true to override this security check.");
+				throw new RuntimeException("Security checks failed.");
+			}
+		}
 		myFactory.setAddress(InetAddress.getByName(settings.getTomcatBindAddress()));
 	    myFactory.setProtocol(settings.getTomcatProtocol());
 	    myFactory.setPort(settings.getTomcatPort());
