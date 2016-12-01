@@ -30,7 +30,7 @@
             <form id='confirmationForm' name='confirmationForm' action='authorize' method='post' ng-init='hpcAccountAccess = false;'>
                 <input name='user_oauth_approval' value='true' type='hidden'/>
                 <input name='scope.HPC_ACCOUNT_ACCESS' ng-value='hpcAccountAccess' type='hidden'>
-                <md-button class="md-raised md-primary" ng-click="hpcAccountAccess = true;">Sounds good to me</md-button>
+                <md-button class="md-raised md-primary" ng-click="hpcAccountAccess = true;">I agree</md-button>
                 <md-button class="md-raised md-warn" ng-click="hpcAccountAccess = false;">No thanks</md-button>
             </form>
         </section>
