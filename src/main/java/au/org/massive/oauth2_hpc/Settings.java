@@ -10,7 +10,9 @@ import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.configuration.Configuration;
@@ -26,6 +28,7 @@ import org.apache.log4j.Logger;
 import au.org.massive.oauth2_hpc.ssh.KeyCodec;
 import au.org.massive.oauth2_hpc.ssh.RSAPrivateKeyCodec;
 import au.org.massive.oauth2_hpc.ssh.RSAPublicKeyCodec;
+import org.mitre.oauth2.model.ClientDetailsEntity.AuthMethod;
 
 /**
  * Class that provides an abstraction from the configuration files, and sensible defaults if
@@ -127,6 +130,10 @@ public class Settings {
 		}
 	}
 
+	public boolean ignoreSecurityWarnings() {
+		return config.getBoolean("ignore-security-warnings", false);
+	}
+
 	public String getOIDCIssuer() {
 		return config.getString("oidc-issuer");
 	}
@@ -141,6 +148,19 @@ public class Settings {
 
 	public String getOIDCRedirectURI() {
 		return config.getString("oidc-redirect-uri");
+	}
+
+	public AuthMethod getOIDCAuthMethod() {
+		return AuthMethod.getByValue(config.getString("oidc-auth-method", "client_secret_basic"));
+	}
+
+	public HashSet<String> getOIDCScopes() {
+		List<Object> scopes = config.getList("oidc-scopes", Arrays.asList("openid", "email", "offline_access", "profile"));
+		HashSet<String> scopeSet = new HashSet<String>();
+		for (Object s : scopes) {
+			scopeSet.add((String) s);
+		}
+		return scopeSet;
 	}
 
 	public String getUpstreamAuthHeaderName() { return config.getString("upstream-auth-header-name", "mail"); }
