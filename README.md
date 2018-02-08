@@ -31,15 +31,17 @@ SSH-AuthZ expect to have its `/oauth/authorize` endpoint protected by mod\_shib 
 ```
 
 ## Certificate signing
-Public key signing is performed by the `/api/v1/sign_key` endpoint. To sign a key, a POST request containing a JSON string containing the public key and an optional 'valid_for' value that specifies the number of days the certificate is valid for. If valid\_for is excluded, the certificate defaults to the maximum allowed time. The public key should be given as the output from `ssh-keygen` for RSA keys. Note: valid\_for must be a string value.
+Public key signing is performed by the `/api/v1/sign_key` endpoint. To sign a key, a POST request containing a JSON string containing the public key and an optional 'valid_for' value that specifies the number of days the certificate is valid for. If valid\_for is excluded, the certificate defaults to the maximum allowed time. The public key should be given as the output from `ssh-keygen` for RSA keys.
 
 Example request:
 ```
 {
     "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAA...GKFnu7e7odat+/czRl jrigby@monash.edu.au",
-    "valid_for": "7"
+    "valid_for": 7
 }
 ```
+
+An additional force-command option may be added using the `force_command` field in the json request.
 
 Example response:
 ```
