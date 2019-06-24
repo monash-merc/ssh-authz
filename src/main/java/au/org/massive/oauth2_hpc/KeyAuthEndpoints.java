@@ -91,14 +91,20 @@ public class KeyAuthEndpoints {
 						throw new JsonSyntaxException(e);
 					}
 
-					SSHCertificateOptions certOpts = SSHCertificateOptions.builder()
+					SSHCertificateOptions.Builder certOptsBuilder = SSHCertificateOptions.builder()
 							.setDefaultOptions()
 							.addPrincipal(remoteHPCUser)
 							.setKeyId(InetAddress.getLocalHost().getHostName()+"-cert_"+remoteHPCUser)
 							.setPubKey(publicKey)
 							.setValidDaysFromNow(requestedValidity)
-							.setType(SSHCertType.SSH_CERT_TYPE_USER)
-							.build();
+							.setType(SSHCertType.SSH_CERT_TYPE_USER);
+
+					String forceCommand = (String) data.get("force_command");
+					if (forceCommand != null) {
+						certOptsBuilder.addCriticalOption(SSHCertificateGenerator.SSHCriticalOptions.FORCE_COMMAND, forceCommand);
+					}
+
+					SSHCertificateOptions certOpts = certOptsBuilder.build();
 
 					String signedCertificate = SSHCertificateGenerator.generateSSHCertificate(certOpts, caPublicKey, caPrivateKey);
 					log.info("Signed a certificate for "+remoteHPCUser+" valid for "+requestedValidity+" days.");
